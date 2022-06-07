@@ -8,7 +8,7 @@
 
 （4）jvm帮我们屏蔽底层操作系统的细节，能够把Class文件翻译成不同平台的CPU指令集，实现一次编译到处运行.
 
-![image-20220315212337600](../图片/image-20220315212337600.png)
+![image-20220315212337600](/图片/image-20220315212337600.png)
 
 
 
@@ -16,7 +16,7 @@
 
 我们可以类比物理机进行思考，下面是一个物理机的模型
 
-![image-20220315212506905](E:\gupao\jvm性能优化\图片\image-20220315212506905.png)
+![image-20220315212506905](/图片/image-20220315212506905.png)
 
 Class文件类比输入设备
 
@@ -28,7 +28,7 @@ JVM类比存储器、控制器、运算器等
 
 JVM的架构图：
 
-![image-20220315212857209](E:\gupao\jvm性能优化\图片\image-20220315212857209.png)
+![image-20220315212857209](/图片/image-20220315212857209.png)
 
 #### 3.JVM和HotSpot的关系
 
@@ -47,7 +47,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 25.151-b12, mixed mode)
 
 官网: https://docs.oracle.com/javase/8/docs/index.html
 
-![image-20220315213822886](E:\gupao\jvm性能优化\图片\image-20220315213822886.png)
+![image-20220315213822886](/图片/image-20220315213822886.png)
 
 JDK：JDK 是 （SDK） 软件开发套件的扩展子集，包括用于开发、调试和监控 Java 应用程序的工具。
 
@@ -84,7 +84,7 @@ public class User {
 
 我们可以通过 `javac User.java`编译生成User.class 文件，打开后发现他是一堆16进制的文件。那么我们可以类比物理机进行分析，对于物理机它只是被0101这种二进制的源，可以猜想到这些Classes文件转化为16进制的目的就是为了让jvm能够识别，java源文件是对开发人员友好的，而class文件是为了能让jvm看得懂。接下来我们可以进行验证分析。
 
-![image-20220315225217254](E:\gupao\jvm性能优化\图片\image-20220315225217254.png)
+![image-20220315225217254](/图片/image-20220315225217254.png)
 
 通过官网可以查看Class Fromate:
 
@@ -158,7 +158,7 @@ All constant_pool table entries have the following general format:
 
 
 
-![image-20220315221355705](E:\gupao\jvm性能优化\图片\image-20220315221355705.png) 
+![image-20220315221355705](/图片/image-20220315221355705.png) 
 
 （6）First constant
 
@@ -389,7 +389,7 @@ Constant pool:
 SourceFile: "User.java"
 ```
 
-**通过上面反编译出来的文件，我们可以清楚的看到是有66个常量的。**
+**通过上面反编译出来的文件，我们可以清楚的看到是有66个常量的。**  
 
 **那我们进一步分析什么是常量，首先`String name="Jack";`这样定义的一个我们可以理解为常量，`#15 = Class              #51            // User`类名 `#28 = Utf8               say` 方法名都是可以是常量，这些也就是我们说的字面量的意思。**
 
@@ -397,7 +397,7 @@ SourceFile: "User.java"
 
 我们知道，一个程序的运行是需要分配内存空间的，目的就是把Class文件加载到内存中，让Cpu去运行。上面我们已经分析了Class文件是如何生成的，接下来我们就开始分析Class文件是如何加载到内存空间的，也就是我们常说的JVM中的**类加载机制**。 
 
-![image-20220315220900818](E:\gupao\jvm性能优化\图片\image-20220315220900818.png)
+![image-20220315220900818](/图片/image-20220315220900818.png)
 
 我们通过如上步骤并遵循java文件的一个编译规则生成了class文件。
 
@@ -409,7 +409,7 @@ SourceFile: "User.java"
   一个项目中肯定有多种类型的Class文件，使用了不同的类加载器进行加载，分别是：
   Bootstrap,Extension,Application,Custom不同类型的加载器会加载不同路径下的文件，各司其职。
 
-  ![image-20220321213838219](E:\gupao\springboot\类加载器)
+  ![image-20220321213838219](/图片/类加载器)
 
   但此时又会存在一个问题，我们知道在rt.jar包下存在`java.lang.String`类，该类会通过Bootstrap类加载器进行加载，
   如果我们应用程序中也存在了一个这样的类岂不是混乱了，这个时候双亲委派模式就出现了。
@@ -504,7 +504,7 @@ TLAB是虚拟机在堆内存的eden划分出来的一块专用空间，是线程
 
 - 程序计数器
 
- 		可以把它看作是当前线程执行的字节码的行号指示器
+可以把它看作是当前线程执行的字节码的行号指示器
 
 #### 8.垃圾收集
 
@@ -524,7 +524,7 @@ TLAB是虚拟机在堆内存的eden划分出来的一块专用空间，是线程
 
 能作为GC Root: 类加载器、Thread、虚拟机栈的本地变量表、static成员、常量引用、本地方法栈的变量等。
 
-![image-20220321222244102](E:\gupao\springboot\可达性分析)
+![image-20220321222244102](/图片/可达性分析)
 
 ##### 2.垃圾收集算法
 
@@ -532,11 +532,11 @@ TLAB是虚拟机在堆内存的eden划分出来的一块专用空间，是线程
 
 标记：找出内存中需要回收的对象，并且把它们标记出来
 
-![image-20220321222647944](E:\gupao\springboot\垃圾收集算法-标记)
+![image-20220321222647944](/图片/垃圾收集算法-标记)
 
 清除：清除掉被标记需要回收的对象，释放出对应的内存空间
 
-![image-20220321222711040](E:\gupao\springboot\垃圾收集算法-清除)
+![image-20220321222711040](/图片/垃圾收集算法-清除)
 
 缺点
 
@@ -586,13 +586,13 @@ Java17 官网：https://docs.oracle.com/en/java/javase/17/gctuning/availablecol
 
 The serial collector uses a single thread to perform all garbage collection work
 
-![image-20220321223217718](E:\gupao\springboot\serial)
+![image-20220321223217718](/图片/serial)
 
 2. ParNew 收集器
 
 ParNew 收集器是 Serial 收集器的多线程版本，除了使用多线程，其他像收集算法,STW,对象分配规则，回收策略与 Serial 收集器完成一样，在底层上，这两种收集器也共用了相当多的代码，它的垃圾收集过程如下
 
-![image-20220321224221544](E:\gupao\springboot\parnew)
+![image-20220321224221544](/图片/parnew)
 
 3. **Parallel**
 
@@ -618,7 +618,7 @@ Parallel Scavenge 收集器提供了两个参数来精确控制吞吐量，分�
 
 除了以上两个参数，还可以用 Parallel Scavenge 收集器提供的第三个参数 -XX:UseAdaptiveSizePolicy，开启这个参数后，就不需要手工指定新生代大小,Eden 与 Survivor 比例（SurvivorRatio）等细节，只需要设置好基本的堆大小（-Xmx 设置最大堆）,以及最大垃圾收集时间与吞吐量大小，虚拟机就会根据当前系统运行情况收集监控信息，动态调整这些参数以尽可能地达到我们设定的最大垃圾收集时间或吞吐量大小这两个指标。自适应策略也是 Parallel Scavenge  与 ParNew 的重要区别！
 
-![image-20220321223336505](E:\gupao\springboot\parallel)
+![image-20220321223336505](/图片/parallel)
 
 3. **CMS(ConcMarkSweepGC)**
 
@@ -646,7 +646,7 @@ running.
 
 (4) 并发清除 CMS concurrent sweep 清除不可达对象回收空间，同时有新垃圾产生，留着下次清理称为浮动垃圾
 
-![image-20220321223512420](E:\gupao\springboot\cms)
+![image-20220321223512420](/图片/cms)
 
 4. **G1(Garbage First)**
 
@@ -674,7 +674,7 @@ probability, while achieving high throughput.
 
 (4) 筛选回收（Live Data Counting and Evacuation） 对各个Region的回收价值和成本进行排序，根据用户所期望的GC停顿时间制定回收计划
 
-![image-20220321223609154](E:\gupao\springboot\g1)
+![image-20220321223609154](/图片/g1)
 
 1 使用G1收集器时，Java堆的内存布局与就与其他收集器有很大差别，它将整个Java堆划分为多个大小相等的独立区域（Region），虽然还保留有
 
@@ -688,7 +688,7 @@ probability, while achieving high throughput.
 
 5 所谓Garbage‐Frist，其实就是优先回收垃圾最多的Region区域
 
-![image-20220321223718169](E:\gupao\springboot\g1-收集图)
+![image-20220321223718169](/图片/g1-收集图)
 
 5. **ZGC**
 
@@ -710,7 +710,7 @@ expensive work concurrently, without stopping the execution of application threa
 
 （3）堆内存变大后停顿时间还是在10ms以内
 
-![image-20220321223748670](E:\gupao\springboot\zgc收集图)
+![image-20220321223748670](/图片/zgc收集图)
 
 **垃圾收集器分类**
 
